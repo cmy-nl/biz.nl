@@ -7,7 +7,7 @@ import { Briefcase, ShoppingBag, Coffee, Wrench, Camera, Users } from 'lucide-re
 const personas = [
   {
     icon: Briefcase,
-    type: 'ZZP\'er & Freelancer',
+    type: "ZZP'er & Freelancer",
     example: '"Als zelfstandig adviseur wil ik professioneel overkomen bij grote bedrijven."',
     result: 'Strak logo + LinkedIn-banner + digitaal visitekaartje in 10 minuten.'
   },
@@ -53,7 +53,7 @@ export function TeamSection() {
             Herken jij jezelf hierin?
           </h2>
           <p className="text-lg text-muted-foreground">
-            Of je nu een startende zzp'er bent of een groeiend bureau — biz.nl past bij jou.
+            Of je nu een startende zzp&apos;er bent of een groeiend bureau — biz.nl past bij jou.
           </p>
         </div>
 

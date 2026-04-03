@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from 'react'
-import { Menu, X, Sparkles, ChevronDown } from 'lucide-react'
+import { Menu, X, Sparkles } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import {
   Sheet,

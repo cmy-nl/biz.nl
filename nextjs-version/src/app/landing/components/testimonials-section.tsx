@@ -99,7 +99,7 @@ export function TestimonialsSection() {
             Wat Nederlandse ondernemers zeggen
           </h2>
           <p className="text-lg text-muted-foreground">
-            Van zzp'er tot groeiend bureau — zij bouwen hun merk met biz.nl.
+            Van zzp&apos;er tot groeiend bureau — zij bouwen hun merk met biz.nl.
           </p>
         </div>
 
@@ -126,7 +126,7 @@ export function TestimonialsSection() {
                 </div>
 
                 <blockquote>
-                  <p className="text-sm leading-relaxed text-muted-foreground">"{testimonial.quote}"</p>
+                  <p className="text-sm leading-relaxed text-muted-foreground">&ldquo;{testimonial.quote}&rdquo;</p>
                 </blockquote>
               </CardContent>
             </Card>
