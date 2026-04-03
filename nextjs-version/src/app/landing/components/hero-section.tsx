@@ -1,22 +1,82 @@
 "use client"
 
-import { useState } from 'react'
-import { ArrowRight, Sparkles, Zap, Globe } from 'lucide-react'
+import { useState, useRef, useEffect } from 'react'
+import { ArrowRight, Sparkles, Zap, Globe, Mic, MicOff, Loader2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { DotPattern } from '@/components/dot-pattern'
 
 const promptExamples = [
-  'Een duurzame koffiebar in Amsterdam voor millennials...',
-  'Een creatief marketingbureau in Utrecht...',
-  'Een online kledingwinkel voor Nederlandse vrouwen...',
-  'Een technisch installatiebedrijf in Rotterdam...',
-  'Een biologische bakkerij in Groningen...',
+  'Ik ben een freelance grafisch ontwerper in Amsterdam, gespecialiseerd in branding voor startups. Ik wil een modern, minimalistisch merk dat creativiteit en professionaliteit uitstraalt voor jonge techbedrijven.',
+  'Wij zijn een duurzame koffiebar in Utrecht die biologische koffie serveert aan bewuste millennials. Onze sfeer is warm, groen en authentiek — zoals een tweede thuis.',
+  'Ik run een online kledingwinkel voor Nederlandse vrouwen van 30-50 jaar. Tijdloze mode, eerlijk geproduceerd. Het merk moet vertrouwen, kwaliteit en vrouwelijkheid uitademen.',
+  'Ons installatiebedrijf in Rotterdam doet elektra en airco voor particulieren en MKB. We zijn betrouwbaar, vakkundig en no-nonsense — een sterk merk dat vertrouwen wekt.',
+  'Ik ben een zelfstandige personal trainer in Den Haag voor drukke professionals van 30-45 jaar. Energiek, resultaatgericht en toegankelijk — ik wil dat mijn merk dat direct uitstraalt.',
+]
+
+const exampleChips = [
+  { label: 'Freelancer', prompt: 'Ik ben een freelance [vak] in Nederland, gericht op [doelgroep]. Mijn stijl is professioneel maar persoonlijk, en ik wil een merk dat direct vertrouwen wekt bij potentiële klanten.' },
+  { label: 'Webshop', prompt: 'Ik heb een online winkel die [product] verkoopt aan Nederlandse consumenten. Het merk moet betrouwbaar, modern en herkenbaar zijn, met een focus op kwaliteit en klantvriendelijkheid.' },
+  { label: 'Restaurant', prompt: 'Ons restaurant in [stad] serveert [keuken] aan een lokaal publiek van 25-55 jaar. De sfeer is [sfeer] en we willen een merk dat gasten al voor de eerste hap het juiste gevoel geeft.' },
+  { label: 'Salon', prompt: 'Ik heb een kapsalon / beautysalon in [stad] voor [doelgroep]. Het merk moet [stijl] uitstralen en me onderscheiden van de concurrentie in mijn buurt.' },
+  { label: 'Coach', prompt: 'Ik ben een zelfstandige coach / therapeut die [doelgroep] helpt met [onderwerp]. Mijn aanpak is [aanpak] en ik wil een merk dat mijn ideale klant direct aanspreekt en vertrouwen geeft.' },
 ]
 
 export function HeroSection() {
   const [prompt, setPrompt] = useState('')
   const [placeholderIndex, setPlaceholderIndex] = useState(0)
+  const [isListening, setIsListening] = useState(false)
+  const [speechSupported, setSpeechSupported] = useState(false)
+  const [isTranscribing, setIsTranscribing] = useState(false)
+  const recognitionRef = useRef<any>(null)
+
+  useEffect(() => {
+    const supported = 'webkitSpeechRecognition' in window || 'SpeechRecognition' in window
+    setSpeechSupported(supported)
+  }, [])
+
+  const toggleSpeech = () => {
+    if (!speechSupported) return
+
+    if (isListening) {
+      recognitionRef.current?.stop()
+      setIsListening(false)
+      setIsTranscribing(false)
+      return
+    }
+
+    const SpeechRecognition = (window as any).webkitSpeechRecognition || (window as any).SpeechRecognition
+    const recognition = new SpeechRecognition()
+    recognition.lang = 'nl-NL'
+    recognition.continuous = true
+    recognition.interimResults = true
+
+    recognition.onstart = () => {
+      setIsListening(true)
+      setIsTranscribing(true)
+    }
+
+    recognition.onresult = (event: any) => {
+      let transcript = ''
+      for (let i = 0; i < event.results.length; i++) {
+        transcript += event.results[i][0].transcript
+      }
+      setPrompt(transcript)
+    }
+
+    recognition.onerror = () => {
+      setIsListening(false)
+      setIsTranscribing(false)
+    }
+
+    recognition.onend = () => {
+      setIsListening(false)
+      setIsTranscribing(false)
+    }
+
+    recognitionRef.current = recognition
+    recognition.start()
+  }
 
   return (
     <section id="hero" className="relative overflow-hidden pt-16 pb-24 sm:pt-24 sm:pb-32">
@@ -58,9 +118,9 @@ export function HeroSection() {
             Logo, website, social media en visitekaartjes — alles in jouw stijl. Inclusief een gratis <strong className="text-foreground">jouw-naam.biz.nl</strong> domein.
           </p>
 
-          {/* Prompt Box — the hero CTA */}
+          {/* Prompt Box */}
           <div className="mx-auto max-w-2xl mb-8">
-            <div className="relative rounded-2xl border-2 border-border bg-background/80 backdrop-blur-sm shadow-2xl shadow-primary/5 focus-within:border-primary transition-colors duration-200">
+            <div className={`relative rounded-2xl border-2 bg-background/80 backdrop-blur-sm shadow-2xl shadow-primary/5 transition-colors duration-200 ${isListening ? 'border-primary shadow-primary/20' : 'border-border focus-within:border-primary'}`}>
               <div className="flex items-start gap-3 p-4">
                 <div className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-primary/10">
                   <Sparkles className="h-4 w-4 text-primary" />
@@ -69,16 +129,38 @@ export function HeroSection() {
                   value={prompt}
                   onChange={e => setPrompt(e.target.value)}
                   placeholder={promptExamples[placeholderIndex]}
-                  rows={3}
-                  className="flex-1 resize-none bg-transparent text-sm leading-relaxed placeholder:text-muted-foreground/60 focus:outline-none"
+                  rows={4}
+                  className="flex-1 resize-none bg-transparent text-sm leading-relaxed placeholder:text-muted-foreground/50 focus:outline-none"
                   onFocus={() => setPlaceholderIndex(Math.floor(Math.random() * promptExamples.length))}
                 />
               </div>
-              <div className="flex items-center justify-between px-4 pb-4 pt-0">
-                <p className="text-xs text-muted-foreground">
-                  Beschrijf jouw bedrijf, doelgroep en stijl
-                </p>
-                <Button size="sm" className="cursor-pointer gap-2 rounded-xl" disabled={!prompt.trim()}>
+              <div className="flex items-center justify-between px-4 pb-4 pt-0 gap-3">
+                <div className="flex items-center gap-2">
+                  {speechSupported && (
+                    <button
+                      onClick={toggleSpeech}
+                      title={isListening ? 'Stop opnemen' : 'Inspreken'}
+                      className={`flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-medium transition-all cursor-pointer border ${
+                        isListening
+                          ? 'bg-primary text-primary-foreground border-primary animate-pulse'
+                          : 'border-border text-muted-foreground hover:text-foreground hover:border-foreground/40'
+                      }`}
+                    >
+                      {isTranscribing ? (
+                        <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                      ) : isListening ? (
+                        <MicOff className="h-3.5 w-3.5" />
+                      ) : (
+                        <Mic className="h-3.5 w-3.5" />
+                      )}
+                      {isListening ? 'Stop' : 'Inspreken'}
+                    </button>
+                  )}
+                  <p className="text-xs text-muted-foreground hidden sm:block">
+                    {isListening ? '🎙️ Aan het luisteren...' : 'Typ of spreek jouw verhaal in'}
+                  </p>
+                </div>
+                <Button size="sm" className="cursor-pointer gap-2 rounded-xl shrink-0" disabled={!prompt.trim()}>
                   <Sparkles className="h-3.5 w-3.5" />
                   Maak mijn merk
                   <ArrowRight className="h-3.5 w-3.5" />
@@ -88,13 +170,13 @@ export function HeroSection() {
 
             {/* Example chips */}
             <div className="mt-3 flex flex-wrap gap-2 justify-center">
-              {['Koffiebar', 'Webshop', 'Freelancer', 'Restaurant', 'Salon'].map(example => (
+              {exampleChips.map(example => (
                 <button
-                  key={example}
-                  onClick={() => setPrompt(`Een ${example.toLowerCase()} in Nederland voor...`)}
+                  key={example.label}
+                  onClick={() => setPrompt(example.prompt)}
                   className="rounded-full border bg-background/60 px-3 py-1 text-xs text-muted-foreground hover:text-foreground hover:border-foreground/40 transition-colors cursor-pointer"
                 >
-                  {example}
+                  {example.label}
                 </button>
               ))}
             </div>
@@ -122,7 +204,6 @@ export function HeroSection() {
           <div className="relative">
             <div className="absolute -top-6 left-1/2 -translate-x-1/2 w-3/4 h-24 bg-primary/20 blur-3xl rounded-full" />
             <div className="relative rounded-2xl border bg-card/60 backdrop-blur-sm shadow-2xl overflow-hidden">
-              {/* Mock brand output preview */}
               <div className="grid grid-cols-3 divide-x divide-border">
                 <div className="p-6 space-y-3">
                   <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Logo</p>
@@ -183,3 +264,4 @@ export function HeroSection() {
     </section>
   )
 }
+
