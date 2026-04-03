@@ -7,8 +7,16 @@ import { Inter } from "next/font/google";
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
 export const metadata: Metadata = {
-  title: "Shadcn Dashboard",
-  description: "A dashboard built with Next.js and shadcn/ui",
+  title: "biz.nl — Jouw merk in minuten",
+  description: "Professionele merkidentiteit voor Nederlandse ondernemers. Logo, website en social media assets in één pakket.",
+  openGraph: {
+    title: "biz.nl — Jouw merk in minuten",
+    description: "Professionele merkidentiteit voor Nederlandse ondernemers.",
+    url: "https://biz.nl",
+    siteName: "biz.nl",
+    locale: "nl_NL",
+    type: "website",
+  },
 };
 
 export default function RootLayout({
@@ -17,7 +25,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${inter.variable} antialiased`}>
+    <html lang="nl" className={`${inter.variable} antialiased`}>
       <body className={inter.className}>
         <ThemeProvider defaultTheme="system" storageKey="nextjs-ui-theme">
           <SidebarConfigProvider>
