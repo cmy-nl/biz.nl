@@ -1,5 +1,5 @@
-import { redirect } from "next/navigation";
+import { LandingPageContent } from "@/app/landing/landing-page-content";
 
 export default function HomePage() {
-  redirect("/landing");
+  return <LandingPageContent />;
 }
