@@ -16,42 +16,24 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form"
-import { Mail, MessageCircle, Github, BookOpen } from 'lucide-react'
+import { Mail, MessageCircle, Phone } from 'lucide-react'
 
 const contactFormSchema = z.object({
-  firstName: z.string().min(2, {
-    message: "First name must be at least 2 characters.",
-  }),
-  lastName: z.string().min(2, {
-    message: "Last name must be at least 2 characters.",
-  }),
-  email: z.string().email({
-    message: "Please enter a valid email address.",
-  }),
-  subject: z.string().min(5, {
-    message: "Subject must be at least 5 characters.",
-  }),
-  message: z.string().min(10, {
-    message: "Message must be at least 10 characters.",
-  }),
+  firstName: z.string().min(2, { message: "Voornaam moet minimaal 2 tekens bevatten." }),
+  lastName: z.string().min(2, { message: "Achternaam moet minimaal 2 tekens bevatten." }),
+  email: z.string().email({ message: "Voer een geldig e-mailadres in." }),
+  subject: z.string().min(5, { message: "Onderwerp moet minimaal 5 tekens bevatten." }),
+  message: z.string().min(10, { message: "Bericht moet minimaal 10 tekens bevatten." }),
 })
 
 export function ContactSection() {
   const form = useForm<z.infer<typeof contactFormSchema>>({
     resolver: zodResolver(contactFormSchema),
-    defaultValues: {
-      firstName: "",
-      lastName: "",
-      email: "",
-      subject: "",
-      message: "",
-    },
+    defaultValues: { firstName: "", lastName: "", email: "", subject: "", message: "" },
   })
 
   function onSubmit(values: z.infer<typeof contactFormSchema>) {
-    // Here you would typically send the form data to your backend
     console.log(values)
-    // You could also show a success message or redirect
     form.reset()
   }
 
@@ -59,163 +41,116 @@ export function ContactSection() {
     <section id="contact" className="py-24 sm:py-32">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-2xl text-center mb-16">
-          <Badge variant="outline" className="mb-4">Get In Touch</Badge>
+          <Badge variant="outline" className="mb-4">Contact</Badge>
           <h2 className="text-3xl font-bold tracking-tight sm:text-4xl mb-4">
-            Need help or have questions?
+            Wij helpen je graag verder
           </h2>
           <p className="text-lg text-muted-foreground">
-            Our team is here to help you get the most out of ShadcnStore. Choose the best way to reach out to us.
+            Heb je vragen of wil je meer weten over biz.nl? Ons Nederlandse team staat voor je klaar.
           </p>
         </div>
 
         <div className="grid gap-8 lg:grid-cols-3">
-          {/* Contact Options */}
-          <div className="space-y-6 order-2 lg:order-1">
-            <Card className="hover:shadow-md transition-shadow cursor-pointer">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <MessageCircle className="h-5 w-5 text-primary" />
-                  Discord Community
+          <div className="space-y-4 order-2 lg:order-1">
+            <Card className="hover:shadow-sm transition-shadow">
+              <CardHeader className="pb-2">
+                <CardTitle className="flex items-center gap-2 text-base">
+                  <MessageCircle className="h-4 w-4 text-primary" />
+                  Live chat
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-muted-foreground mb-3">
-                  Join our active community for quick help and discussions with other developers.
+                <p className="text-sm text-muted-foreground mb-3">
+                  Maandag t/m vrijdag bereikbaar van 9:00 tot 17:00 via live chat.
+                </p>
+                <Button variant="outline" size="sm" className="cursor-pointer">Chat starten</Button>
+              </CardContent>
+            </Card>
+
+            <Card className="hover:shadow-sm transition-shadow">
+              <CardHeader className="pb-2">
+                <CardTitle className="flex items-center gap-2 text-base">
+                  <Mail className="h-4 w-4 text-primary" />
+                  E-mail
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-muted-foreground mb-3">
+                  We beantwoorden je e-mail binnen 1 werkdag.
                 </p>
                 <Button variant="outline" size="sm" className="cursor-pointer" asChild>
-                  <a href="https://discord.com/invite/XEQhPc9a6p" target="_blank" rel="noopener noreferrer">
-                    Join Discord
-                  </a>
+                  <a href="mailto:hallo@biz.nl">hallo@biz.nl</a>
                 </Button>
               </CardContent>
             </Card>
 
-            <Card className="hover:shadow-md transition-shadow cursor-pointer">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Github className="h-5 w-5 text-primary" />
-                  GitHub Issues
+            <Card className="hover:shadow-sm transition-shadow">
+              <CardHeader className="pb-2">
+                <CardTitle className="flex items-center gap-2 text-base">
+                  <Phone className="h-4 w-4 text-primary" />
+                  Telefoon
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-muted-foreground mb-3">
-                  Report bugs, request features, or contribute to our open source repository.
+                <p className="text-sm text-muted-foreground mb-3">
+                  Telefonisch bereikbaar op werkdagen van 9:00 tot 17:00.
                 </p>
-                <Button variant="outline" size="sm" className="cursor-pointer" asChild>
-                  <a href="https://github.com/silicondeck/shadcn-dashboard-landing-template/issues" target="_blank" rel="noopener noreferrer">
-                    View on GitHub
-                  </a>
-                </Button>
-              </CardContent>
-            </Card>
-
-            <Card className="hover:shadow-md transition-shadow cursor-pointer">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <BookOpen className="h-5 w-5 text-primary" />
-                  Documentation
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-muted-foreground mb-3">
-                  Browse our comprehensive guides, tutorials, and component documentation.
-                </p>
-                <Button variant="outline" size="sm" className="cursor-pointer" asChild>
-                  <a href="#">
-                    View Docs
-                  </a>
-                </Button>
+                <Button variant="outline" size="sm" className="cursor-pointer">Terugbelverzoek</Button>
               </CardContent>
             </Card>
           </div>
 
-          {/* Contact Form */}
           <div className="lg:col-span-2 order-1 lg:order-2">
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <Mail className="h-5 w-5" />
-                  Send us a message
+                  <Mail className="h-4 w-4" />
+                  Stuur ons een bericht
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 <Form {...form}>
-                  <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+                  <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
                     <div className="grid gap-4 sm:grid-cols-2">
-                      <FormField
-                        control={form.control}
-                        name="firstName"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>First name</FormLabel>
-                            <FormControl>
-                              <Input placeholder="John" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      <FormField
-                        control={form.control}
-                        name="lastName"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Last name</FormLabel>
-                            <FormControl>
-                              <Input placeholder="Doe" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
+                      <FormField control={form.control} name="firstName" render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Voornaam</FormLabel>
+                          <FormControl><Input placeholder="Jan" {...field} /></FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )} />
+                      <FormField control={form.control} name="lastName" render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Achternaam</FormLabel>
+                          <FormControl><Input placeholder="de Vries" {...field} /></FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )} />
                     </div>
-                    <FormField
-                      control={form.control}
-                      name="email"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Email</FormLabel>
-                          <FormControl>
-                            <Input type="email" placeholder="john@example.com" {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name="subject"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Subject</FormLabel>
-                          <FormControl>
-                            <Input placeholder="Component request, bug report, general inquiry..." {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name="message"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Message</FormLabel>
-                          <FormControl>
-                            <Textarea
-                              placeholder="Tell us how we can help you with ShadcnStore components..."
-                              rows={10}
-                              className="min-h-50"
-                              {...field}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <Button type="submit" className="w-full cursor-pointer">
-                      Send Message
-                    </Button>
+                    <FormField control={form.control} name="email" render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>E-mailadres</FormLabel>
+                        <FormControl><Input type="email" placeholder="jan@bedrijf.nl" {...field} /></FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )} />
+                    <FormField control={form.control} name="subject" render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Onderwerp</FormLabel>
+                        <FormControl><Input placeholder="Vraag over mijn abonnement..." {...field} /></FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )} />
+                    <FormField control={form.control} name="message" render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Bericht</FormLabel>
+                        <FormControl>
+                          <Textarea placeholder="Hoe kunnen we je helpen?" rows={6} className="min-h-32 resize-none" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )} />
+                    <Button type="submit" className="w-full cursor-pointer">Bericht versturen</Button>
                   </form>
                 </Form>
               </CardContent>
