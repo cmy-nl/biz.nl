@@ -6,20 +6,20 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { DotPattern } from '@/components/dot-pattern'
 
-const promptExamples = [
-  'Ik ben een freelance grafisch ontwerper in Amsterdam, gespecialiseerd in branding voor startups. Ik wil een modern, minimalistisch merk dat creativiteit en professionaliteit uitstraalt voor jonge techbedrijven.',
-  'Wij zijn een duurzame koffiebar in Utrecht die biologische koffie serveert aan bewuste millennials. Onze sfeer is warm, groen en authentiek — zoals een tweede thuis.',
-  'Ik run een online kledingwinkel voor Nederlandse vrouwen van 30-50 jaar. Tijdloze mode, eerlijk geproduceerd. Het merk moet vertrouwen, kwaliteit en vrouwelijkheid uitademen.',
-  'Ons installatiebedrijf in Rotterdam doet elektra en airco voor particulieren en MKB. We zijn betrouwbaar, vakkundig en no-nonsense — een sterk merk dat vertrouwen wekt.',
-  'Ik ben een zelfstandige personal trainer in Den Haag voor drukke professionals van 30-45 jaar. Energiek, resultaatgericht en toegankelijk — ik wil dat mijn merk dat direct uitstraalt.',
+const getPromptExamples = (city: string) => [
+  `Ik ben een freelance grafisch ontwerper in ${city}, gespecialiseerd in branding voor startups. Ik wil een modern, minimalistisch merk dat creativiteit en professionaliteit uitstraalt voor jonge techbedrijven.`,
+  `Wij zijn een duurzame koffiebar in ${city} die biologische koffie serveert aan bewuste millennials. Onze sfeer is warm, groen en authentiek — zoals een tweede thuis.`,
+  `Ik run een online kledingwinkel voor Nederlandse vrouwen van 30-50 jaar. Tijdloze mode, eerlijk geproduceerd. Het merk moet vertrouwen, kwaliteit en vrouwelijkheid uitademen.`,
+  `Ons installatiebedrijf in ${city} doet elektra en airco voor particulieren en MKB. We zijn betrouwbaar, vakkundig en no-nonsense — een sterk merk dat vertrouwen wekt.`,
+  `Ik ben een zelfstandige personal trainer in ${city} voor drukke professionals van 30-45 jaar. Energiek, resultaatgericht en toegankelijk — ik wil dat mijn merk dat direct uitstraalt.`,
 ]
 
-const exampleChips = [
-  { label: 'Freelancer', prompt: 'Ik ben een freelance [vak] in Nederland, gericht op [doelgroep]. Mijn stijl is professioneel maar persoonlijk, en ik wil een merk dat direct vertrouwen wekt bij potentiële klanten.' },
-  { label: 'Webshop', prompt: 'Ik heb een online winkel die [product] verkoopt aan Nederlandse consumenten. Het merk moet betrouwbaar, modern en herkenbaar zijn, met een focus op kwaliteit en klantvriendelijkheid.' },
-  { label: 'Restaurant', prompt: 'Ons restaurant in [stad] serveert [keuken] aan een lokaal publiek van 25-55 jaar. De sfeer is [sfeer] en we willen een merk dat gasten al voor de eerste hap het juiste gevoel geeft.' },
-  { label: 'Salon', prompt: 'Ik heb een kapsalon / beautysalon in [stad] voor [doelgroep]. Het merk moet [stijl] uitstralen en me onderscheiden van de concurrentie in mijn buurt.' },
-  { label: 'Coach', prompt: 'Ik ben een zelfstandige coach / therapeut die [doelgroep] helpt met [onderwerp]. Mijn aanpak is [aanpak] en ik wil een merk dat mijn ideale klant direct aanspreekt en vertrouwen geeft.' },
+const getExampleChips = (city: string) => [
+  { label: 'Freelancer', prompt: `Ik ben een freelance [vak] in ${city}, gericht op [doelgroep]. Mijn stijl is professioneel maar persoonlijk, en ik wil een merk dat direct vertrouwen wekt bij potentiële klanten.` },
+  { label: 'Webshop', prompt: `Ik heb een online winkel die [product] verkoopt aan Nederlandse consumenten. Het merk moet betrouwbaar, modern en herkenbaar zijn, met een focus op kwaliteit en klantvriendelijkheid.` },
+  { label: 'Restaurant', prompt: `Ons restaurant in ${city} serveert [keuken] aan een lokaal publiek van 25-55 jaar. De sfeer is [sfeer] en we willen een merk dat gasten al voor de eerste hap het juiste gevoel geeft.` },
+  { label: 'Salon', prompt: `Ik heb een kapsalon / beautysalon in ${city} voor [doelgroep]. Het merk moet [stijl] uitstralen en me onderscheiden van de concurrentie in mijn buurt.` },
+  { label: 'Coach', prompt: `Ik ben een zelfstandige coach / therapeut in ${city} die [doelgroep] helpt met [onderwerp]. Mijn aanpak is [aanpak] en ik wil een merk dat mijn ideale klant direct aanspreekt.` },
 ]
 
 export function HeroSection() {
@@ -28,12 +28,25 @@ export function HeroSection() {
   const [isListening, setIsListening] = useState(false)
   const [speechSupported, setSpeechSupported] = useState(false)
   const [isTranscribing, setIsTranscribing] = useState(false)
+  const [userCity, setUserCity] = useState('Nederland')
   const recognitionRef = useRef<any>(null)
 
   useEffect(() => {
     const supported = 'webkitSpeechRecognition' in window || 'SpeechRecognition' in window
     setSpeechSupported(supported)
   }, [])
+
+  useEffect(() => {
+    fetch('/api/geo')
+      .then(r => r.json())
+      .then(data => {
+        if (data.city) setUserCity(decodeURIComponent(data.city))
+      })
+      .catch(() => {})
+  }, [])
+
+  const promptExamples = getPromptExamples(userCity)
+  const exampleChips = getExampleChips(userCity)
 
   const toggleSpeech = () => {
     if (!speechSupported) return
