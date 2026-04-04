@@ -157,7 +157,7 @@ export function LandingFooter() {
           <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
             <span>Gemaakt met</span>
             <Heart className="h-3.5 w-3.5 text-red-500 fill-current" />
-            <span>in Nederland · © {new Date().getFullYear()} biz.nl</span>
+            <span>in Rotterdam · © {new Date().getFullYear()} biz.nl</span>
           </div>
           <div className="flex items-center gap-4 text-sm text-muted-foreground">
             <a href="#privacy" className="hover:text-foreground transition-colors">Privacy</a>
