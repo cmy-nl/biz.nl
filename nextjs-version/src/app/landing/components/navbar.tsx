@@ -42,7 +42,6 @@ const mainNav = [
   { name: 'Blog', href: '/blog' },
 ]
 
-const smoothScrollTo = (targetId: string) => {
   const element = document.querySelector(targetId)
   if (element) element.scrollIntoView({ behavior: 'smooth', block: 'start' })
 }
