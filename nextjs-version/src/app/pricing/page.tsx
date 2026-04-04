@@ -110,6 +110,7 @@ const featureRows = [
 
 // ── Quiz ──────────────────────────────────────────────────────────────────────
 
+type Answer = { value: string; label: string }
 
 const quizQuestions = [
   {
@@ -523,7 +524,7 @@ type QuizState = 'quiz' | 'result' | 'all'
 
 export default function PricingPage() {
   const [isYearly, setIsYearly] = useState(false)
-  const [quizState, setQuizState] = useState<QuizState>('quiz')
+  const [quizState, setQuizState] = useState<QuizState>('all')
   const [result, setResult] = useState<RecommendResult | null>(null)
   const [openFaq, setOpenFaq] = useState<number | null>(null)
 
@@ -536,30 +537,15 @@ export default function PricingPage() {
     <PageLayout>
 
       {/* ── Hero ── */}
-      <section className="pt-20 pb-10 text-center border-b">
+      <section className="pt-20 pb-10 text-center">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-2xl">
           <Badge variant="outline" className="mb-5">Transparante prijzen</Badge>
           <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl mb-4">
             Welk plan past bij jou?
           </h1>
-          <p className="text-lg text-muted-foreground mb-8">
-            Beantwoord drie korte vragen. Wij adviseren het beste plan — en leggen precies uit waarom.
+          <p className="text-lg text-muted-foreground">
+            Bekijk alle plannen of doe de quiz voor een persoonlijk advies.
           </p>
-          <div className="flex flex-col items-center gap-2">
-            <ToggleGroup
-              type="single"
-              value={isYearly ? 'yearly' : 'monthly'}
-              onValueChange={v => { if (v) setIsYearly(v === 'yearly') }}
-              className="bg-background border rounded-full p-1"
-            >
-              <ToggleGroupItem value="monthly" className="data-[state=on]:bg-foreground data-[state=on]:text-background px-6 rounded-full text-sm cursor-pointer">Per maand</ToggleGroupItem>
-              <ToggleGroupItem value="yearly" className="data-[state=on]:bg-foreground data-[state=on]:text-background px-6 rounded-full text-sm cursor-pointer">Per jaar</ToggleGroupItem>
-            </ToggleGroup>
-            {isYearly
-              ? <p className="text-sm text-green-600 dark:text-green-400 font-medium">✓ Tot 20% korting — je betaalt voor 10 maanden, krijgt 12</p>
-              : <p className="text-sm text-muted-foreground">Kies jaarlijks en bespaar tot 20%</p>
-            }
-          </div>
         </div>
       </section>
 
@@ -592,15 +578,27 @@ export default function PricingPage() {
 
           {quizState === 'all' && (
             <div>
-              <div className="flex items-center justify-between mb-5">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
                 <h2 className="font-bold text-lg">Alle plannen</h2>
-                <button onClick={() => setQuizState('quiz')} className="text-sm text-primary hover:underline cursor-pointer">Quiz opnieuw doen</button>
+                <div className="flex items-center gap-4">
+                  <ToggleGroup
+                    type="single"
+                    value={isYearly ? 'yearly' : 'monthly'}
+                    onValueChange={v => { if (v) setIsYearly(v === 'yearly') }}
+                    className="bg-background border rounded-full p-1"
+                  >
+                    <ToggleGroupItem value="monthly" className="data-[state=on]:bg-foreground data-[state=on]:text-background px-4 rounded-full text-xs cursor-pointer">Per maand</ToggleGroupItem>
+                    <ToggleGroupItem value="yearly" className="data-[state=on]:bg-foreground data-[state=on]:text-background px-4 rounded-full text-xs cursor-pointer">Per jaar</ToggleGroupItem>
+                  </ToggleGroup>
+                  {isYearly && <span className="text-xs text-green-600 dark:text-green-400 font-medium whitespace-nowrap">20% korting</span>}
+                  <button onClick={() => setQuizState('quiz')} className="text-sm text-primary hover:underline cursor-pointer whitespace-nowrap">🎯 Welk plan past bij mij?</button>
+                </div>
               </div>
               <AllPlans isYearly={isYearly} recommendedId={result?.planId ?? null} />
             </div>
           )}
 
-          {quizState !== 'all' && (
+          {quizState !== 'all' && quizState !== 'all' && (
             <div className="text-center mt-6">
               <button onClick={() => setQuizState('all')} className="text-sm text-muted-foreground hover:text-foreground cursor-pointer underline underline-offset-4">
                 Toch alle plannen vergelijken
