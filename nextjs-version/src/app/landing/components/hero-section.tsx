@@ -7,7 +7,6 @@ import { Badge } from '@/components/ui/badge'
 import { DotPattern } from '@/components/dot-pattern'
 
 const getPromptExamples = (city: string) => {
-  const loc = city || 'Nederland'
   const inLoc = city ? `in ${city}` : 'in Nederland'
   return [
     `Ik ben een freelance grafisch ontwerper ${inLoc}, gespecialiseerd in branding voor startups. Ik wil een modern, minimalistisch merk dat creativiteit en professionaliteit uitstraalt.`,
