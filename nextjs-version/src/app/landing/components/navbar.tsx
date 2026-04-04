@@ -42,10 +42,6 @@ const mainNav = [
   { name: 'Blog', href: '/blog' },
 ]
 
-  const element = document.querySelector(targetId)
-  if (element) element.scrollIntoView({ behavior: 'smooth', block: 'start' })
-}
-
 export function LandingNavbar() {
   const [isOpen, setIsOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
