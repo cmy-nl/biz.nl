@@ -15,28 +15,28 @@ const newsletterSchema = z.object({
 
 const footerLinks = {
   product: [
-    { name: 'Hoe het werkt', href: '#features' },
-    { name: 'Prijzen', href: '#pricing' },
-    { name: 'Voorbeelden', href: '#testimonials' },
-    { name: 'Merkgenerator', href: '#hero' },
+    { name: 'Functies', href: '/features' },
+    { name: 'Prijzen', href: '/pricing' },
+    { name: 'Voor bureaus', href: '/agencies' },
+    { name: 'Affiliate programma', href: '/affiliates' },
   ],
   company: [
-    { name: 'Over ons', href: '#about' },
-    { name: 'Blog', href: '#blog' },
-    { name: 'Partners', href: '#partners' },
-    { name: 'Pers', href: '#pers' },
+    { name: 'Over ons', href: '/about' },
+    { name: 'Blog', href: '/blog' },
+    { name: 'Contact', href: '/contact' },
+    { name: 'FAQ', href: '/#faq' },
   ],
   support: [
-    { name: 'Helpcentrum', href: '#help' },
-    { name: 'Contact', href: '#contact' },
-    { name: 'FAQ', href: '#faq' },
-    { name: 'Status', href: '#status' },
+    { name: 'Helpcentrum', href: '/contact' },
+    { name: 'Contact', href: '/contact' },
+    { name: 'Status', href: '#' },
+    { name: 'Affiliates', href: '/affiliates' },
   ],
   legal: [
-    { name: 'Privacybeleid', href: '#privacy' },
-    { name: 'Algemene voorwaarden', href: '#terms' },
-    { name: 'Cookiebeleid', href: '#cookies' },
-    { name: 'AVG', href: '#gdpr' },
+    { name: 'Privacybeleid', href: '/privacy' },
+    { name: 'Algemene voorwaarden', href: '/voorwaarden' },
+    { name: 'Cookiebeleid', href: '/cookies' },
+    { name: 'AVG', href: '/avg' },
   ],
 }
 
@@ -157,12 +157,13 @@ export function LandingFooter() {
           <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
             <span>Gemaakt met</span>
             <Heart className="h-3.5 w-3.5 text-red-500 fill-current" />
-            <span>in Rotterdam · © {new Date().getFullYear()} biz.nl</span>
+            <span>in Nederland · © {new Date().getFullYear()} biz.nl</span>
           </div>
           <div className="flex items-center gap-4 text-sm text-muted-foreground">
-            <a href="#privacy" className="hover:text-foreground transition-colors">Privacy</a>
-            <a href="#terms" className="hover:text-foreground transition-colors">Voorwaarden</a>
-            <a href="#cookies" className="hover:text-foreground transition-colors">Cookies</a>
+            <a href="/privacy" className="hover:text-foreground transition-colors">Privacy</a>
+            <a href="/voorwaarden" className="hover:text-foreground transition-colors">Voorwaarden</a>
+            <a href="/cookies" className="hover:text-foreground transition-colors">Cookies</a>
+            <a href="/avg" className="hover:text-foreground transition-colors">AVG</a>
           </div>
         </div>
       </div>
