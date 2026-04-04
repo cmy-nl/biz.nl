@@ -1,6 +1,6 @@
 import { PageLayout } from '@/components/page-layout'
 import { Badge } from '@/components/ui/badge'
-import { Shield, FileText, Mail, AlertCircle } from 'lucide-react'
+import { Shield, Mail, AlertCircle } from 'lucide-react'
 import Link from 'next/link'
 
 const rights = [
