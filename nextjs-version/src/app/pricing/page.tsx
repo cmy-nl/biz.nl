@@ -4,7 +4,7 @@ import { PageLayout } from '@/components/page-layout'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
-import { Check, Sparkles, Zap, Globe, Info, ArrowRight, ChevronDown, ChevronUp } from 'lucide-react'
+import { Sparkles, Zap, Globe, Info, ArrowRight, ChevronDown, ChevronUp } from 'lucide-react'
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
 import { useState } from 'react'
 
@@ -36,14 +36,12 @@ const features = [
 ]
 
 const creditActions = [
-  { action: 'Volledig merkpakket', credits: 20, icon: '🎨' },
-  { action: 'Logo genereren', credits: 8, icon: '✦' },
-  { action: 'Website publiceren', credits: 5, icon: '🌐' },
-  { action: 'Blogpost schrijven', credits: 5, icon: '✍️' },
-  { action: 'Social media post', credits: 2, icon: '📱' },
-  { action: 'SEO per pagina', credits: 2, icon: '🔍' },
-  { action: 'Flyer / printable', credits: 6, icon: '🖨️' },
-  { action: 'Concurrentieanalyse', credits: 8, icon: '📊' },
+  { action: 'Mijn merk laten maken', credits: 20, icon: '🎨', desc: 'Logo, kleuren, tekst — alles in één keer' },
+  { action: 'Nieuw logo proberen', credits: 8, icon: '✦', desc: 'Een andere stijl uitproberen' },
+  { action: 'Mijn website online zetten', credits: 5, icon: '🌐', desc: 'Of updaten na een wijziging' },
+  { action: 'Blogpost laten schrijven', credits: 5, icon: '✍️', desc: 'AI schrijft een volledig artikel' },
+  { action: 'Social media bericht', credits: 2, icon: '📱', desc: 'Voor Instagram, LinkedIn of Facebook' },
+  { action: 'Flyer of visitekaartje', credits: 6, icon: '🖨️', desc: 'Printklaar bestand downloaden' },
 ]
 
 const topUpPacks = [
@@ -171,8 +169,8 @@ function UsageCalculator() {
   return (
     <div className="rounded-2xl border bg-card overflow-hidden">
       <div className="p-6 border-b bg-muted/30">
-        <h3 className="font-bold text-lg mb-1">Bereken jouw verbruik</h3>
-        <p className="text-sm text-muted-foreground">Hoeveel AI-acties doe je gemiddeld per maand? Schuif de aantallen aan.</p>
+        <h3 className="font-bold text-lg mb-1">Hoe actief wil je zijn?</h3>
+        <p className="text-sm text-muted-foreground">Geef aan wat je per maand wilt doen. Wij rekenen uit welk plan het beste past.</p>
       </div>
       <div className="p-6 space-y-4">
         {creditActions.map((action) => (
@@ -411,15 +409,15 @@ export default function PricingPage() {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-10">
-              <h2 className="text-2xl font-bold mb-2">Weet je niet welk plan bij jou past?</h2>
-              <p className="text-muted-foreground text-sm">Gebruik de quiz of bereken je verbruik zelf.</p>
+              <h2 className="text-2xl font-bold mb-2">Niet zeker welk plan jij nodig hebt?</h2>
+              <p className="text-muted-foreground text-sm">Geen probleem — beantwoord een paar vragen of stel in wat je wilt doen. Wij adviseren het beste plan.</p>
             </div>
 
             <div className="grid lg:grid-cols-2 gap-6">
               {/* Quiz */}
               <div>
                 <div className="flex items-center justify-between mb-4">
-                  <h3 className="font-semibold">🎯 Planadvies in 3 vragen</h3>
+                  <h3 className="font-semibold">🎯 Welk plan past bij mij?</h3>
                   {!showQuiz && (
                     <Button variant="outline" size="sm" className="cursor-pointer" onClick={() => setShowQuiz(true)}>Start quiz</Button>
                   )}
@@ -453,7 +451,7 @@ export default function PricingPage() {
 
               {/* Calculator */}
               <div>
-                <h3 className="font-semibold mb-4">🧮 Bereken jouw verbruik</h3>
+                <h3 className="font-semibold mb-4">🧮 Wat wil je per maand doen?</h3>
                 <UsageCalculator />
               </div>
             </div>
