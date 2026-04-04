@@ -40,8 +40,7 @@ export function CTASection() {
               Gratis merk maken
               <ArrowRight className="h-4 w-4" />
             </Button>
-            <Button size="lg" variant="outline" className="cursor-pointer px-8 text-base border-background/30 text-background hover:bg-background/10 dark:border-border dark:text-foreground dark:hover:bg-muted">
-              <Globe className="h-4 w-4 mr-2" />
+<Button size="lg" variant="outline" className="cursor-pointer px-8 text-base border-white/40 text-white hover:bg-white/10">              <Globe className="h-4 w-4 mr-2" />
               Bekijk voorbeelden
             </Button>
           </div>
