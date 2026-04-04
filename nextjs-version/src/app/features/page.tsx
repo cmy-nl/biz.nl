@@ -296,16 +296,65 @@ export default function FeaturesPage() {
       </section>
 
       {/* CTA */}
-      <section className="py-20 bg-foreground text-background">
-        <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl font-bold mb-4">Klaar om te beginnen?</h2>
-          <p className="text-background/70 mb-8 max-w-xl mx-auto">Start gratis en ontdek hoe snel je een professioneel merk kunt bouwen.</p>
-          <Button size="lg" variant="secondary" className="cursor-pointer gap-2" asChild>
-            <Link href="/pricing">
-              <Sparkles className="h-4 w-4" />
-              Gratis starten — geen creditcard nodig
-            </Link>
-          </Button>
+      <section className="py-24 bg-foreground text-background">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="max-w-4xl mx-auto">
+            {/* Social proof bar */}
+            <div className="flex flex-wrap items-center justify-center gap-6 mb-12 text-sm text-background/50">
+              <div className="flex items-center gap-2">
+                <div className="flex -space-x-2">
+                  {["JB","MV","DH","SR"].map((i) => (
+                    <div key={i} className="h-7 w-7 rounded-full bg-background/20 border-2 border-foreground flex items-center justify-center text-[9px] font-bold text-background/80">{i}</div>
+                  ))}
+                </div>
+                <span>2.400+ Nederlandse ondernemers gingen je voor</span>
+              </div>
+              <div className="hidden sm:flex items-center gap-1.5">
+                {[1,2,3,4,5].map(i => (
+                  <svg key={i} className="h-4 w-4 fill-amber-400" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                ))}
+                <span className="ml-1">4.8/5 gemiddelde beoordeling</span>
+              </div>
+            </div>
+
+            {/* Main CTA */}
+            <div className="text-center">
+              <h2 className="text-4xl sm:text-5xl font-extrabold tracking-tight mb-4">
+                Jouw merk staat over{" "}
+                <span className="relative inline-block">
+                  5 minuten
+                  <svg className="absolute -bottom-1 left-0 w-full" viewBox="0 0 200 8" fill="none">
+                    <path d="M2 6C40 2 100 1 198 4" stroke="currentColor" strokeWidth="3" strokeLinecap="round" className="text-background/30"/>
+                  </svg>
+                </span>
+                {" "}online
+              </h2>
+              <p className="text-background/60 text-lg max-w-xl mx-auto mb-10">
+                Beschrijf jouw bedrijf, wij bouwen het merk. Logo, website, social media en meer — direct klaar om te gebruiken.
+              </p>
+
+              {/* CTA buttons */}
+              <div className="flex flex-col sm:flex-row gap-4 justify-center mb-10">
+                <Button size="lg" variant="secondary" className="cursor-pointer gap-2 px-8 text-base font-semibold" asChild>
+                  <Link href="/pricing">
+                    <Sparkles className="h-5 w-5" />
+                    Gratis beginnen
+                  </Link>
+                </Button>
+                <Button size="lg" variant="outline" className="cursor-pointer px-8 text-base border-white/40 text-white hover:bg-white/10" asChild>
+                  <Link href="/pricing">Prijzen bekijken</Link>
+                </Button>
+              </div>
+
+              {/* Trust signals */}
+              <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-2 text-sm text-background/40">
+                <span className="flex items-center gap-1.5"><span className="h-1.5 w-1.5 rounded-full bg-green-400 inline-block"/>Geen creditcard nodig</span>
+                <span className="flex items-center gap-1.5"><span className="h-1.5 w-1.5 rounded-full bg-background/30 inline-block"/>14 dagen geld-terug-garantie</span>
+                <span className="flex items-center gap-1.5"><span className="h-1.5 w-1.5 rounded-full bg-background/30 inline-block"/>Gratis .biz.nl domein</span>
+                <span className="flex items-center gap-1.5"><span className="h-1.5 w-1.5 rounded-full bg-background/30 inline-block"/>Op elk moment opzegbaar</span>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
     </PageLayout>
