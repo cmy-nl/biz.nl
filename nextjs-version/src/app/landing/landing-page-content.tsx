@@ -1,18 +1,15 @@
 "use client"
 import { LandingNavbar } from './components/navbar'
 import { HeroSection } from './components/hero-section'
-import { LogoCarousel } from './components/logo-carousel'
-import { StatsSection } from './components/stats-section'
+import { SocialProofBar } from './components/social-proof-bar'
+import { DreamSection } from './components/dream-section'
+import { HowItWorksSection } from './components/how-it-works-section'
 import { FeaturesSection } from './components/features-section'
-import { TeamSection } from './components/team-section'
 import { TestimonialsSection } from './components/testimonials-section'
-import { BlogSection } from './components/blog-section'
-import { PricingSection } from './components/pricing-section'
-import { CTASection } from './components/cta-section'
-import { ContactSection } from './components/contact-section'
+import { PricingTeaser } from './components/pricing-teaser'
 import { FaqSection } from './components/faq-section'
+import { FinalCTASection } from './components/final-cta-section'
 import { LandingFooter } from './components/footer'
-import { AboutSection } from './components/about-section'
 
 export function LandingPageContent() {
   return (
@@ -20,17 +17,14 @@ export function LandingPageContent() {
       <LandingNavbar />
       <main>
         <HeroSection />
-        <LogoCarousel />
-        <StatsSection />
-        <AboutSection />
+        <SocialProofBar />
+        <DreamSection />
+        <HowItWorksSection />
         <FeaturesSection />
-        <TeamSection />
-        <PricingSection />
         <TestimonialsSection />
-        <BlogSection />
+        <PricingTeaser />
         <FaqSection />
-        <CTASection />
-        <ContactSection />
+        <FinalCTASection />
       </main>
       <LandingFooter />
     </div>
