@@ -110,6 +110,7 @@ const featureRows = [
 
 // ── Quiz ──────────────────────────────────────────────────────────────────────
 
+type Answer = { value: string; label: string }
 
 const quizQuestions = [
   {
@@ -345,67 +346,157 @@ function RecommendedPlan({
 // ── All plans comparison (shown after quiz, or on demand) ─────────────────────
 
 function AllPlans({ isYearly, recommendedId }: { isYearly: boolean; recommendedId: string | null }) {
+  const [selected, setSelected] = useState(() => {
+    const rec = plans.find(p => p.id === recommendedId)
+    return rec ? plans.indexOf(rec) : 2 // default Growth
+  })
+
+  const plan = plans[selected]
+  const price = isYearly ? plan.yearlyPrice : plan.monthlyPrice
+  const saving = isYearly ? Math.round((plan.monthlyPrice - plan.yearlyPrice) * 12) : 0
+  const planFeatures = featureRows.filter(f => f.plans.includes(plan.id))
+  const missingFeatures = featureRows.filter(f => !f.plans.includes(plan.id))
+
   return (
-    <div className="space-y-4">
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
-        {plans.map(plan => {
-          const price = isYearly ? plan.yearlyPrice : plan.monthlyPrice
-          const isRec = recommendedId === plan.id
-          return (
-            <div key={plan.id} className={`relative rounded-2xl border p-5 flex flex-col ${plan.popular ? 'border-primary/60 shadow-lg ring-1 ring-primary/20 bg-card' : isRec ? 'border-green-500/50 ring-1 ring-green-500/20 bg-green-500/5' : 'bg-card'}`}>
-              {plan.popular && <Badge className="absolute -top-3 left-1/2 -translate-x-1/2 text-xs px-2 whitespace-nowrap"><Sparkles className="h-3 w-3 mr-1" />Populair</Badge>}
-              {isRec && !plan.popular && <Badge variant="outline" className="absolute -top-3 left-1/2 -translate-x-1/2 text-xs px-2 whitespace-nowrap border-green-500 text-green-700 dark:text-green-400 bg-background">Aanbevolen</Badge>}
-              <p className="font-bold text-sm mb-1">{plan.name}</p>
-              <p className="text-xs text-muted-foreground mb-3 leading-snug">{plan.tagline}</p>
-              <div className="mb-3">
-                <span className="text-xl font-extrabold">€{price.toFixed(2).replace('.', ',')}</span>
-                <span className="text-xs text-muted-foreground">/mo</span>
-              </div>
-              <div className="text-xs text-muted-foreground space-y-1 mb-4 flex-1">
-                <div className="flex items-center gap-1"><Zap className="h-3 w-3 text-primary" />{plan.creditsLabel}</div>
-                <div className="flex items-center gap-1"><Globe className="h-3 w-3" />{plan.workspaces} {plan.workspaces === 1 ? 'merk' : 'merken'}</div>
-              </div>
-              <Button variant={plan.popular || isRec ? 'default' : 'outline'} size="sm" className="w-full cursor-pointer text-xs" asChild>
-                <Link href="#">{plan.cta}</Link>
-              </Button>
-            </div>
-          )
-        })}
+    <div className="space-y-6">
+      {/* Slider selector */}
+      <div className="rounded-2xl border bg-card p-2">
+        <div className="grid grid-cols-5 gap-1">
+          {plans.map((p, i) => (
+            <button
+              key={p.id}
+              onClick={() => setSelected(i)}
+              className={`relative rounded-xl py-2.5 px-1 text-center transition-all cursor-pointer ${
+                selected === i
+                  ? 'bg-foreground text-background shadow-sm'
+                  : 'hover:bg-muted text-muted-foreground'
+              }`}
+            >
+              {p.popular && selected !== i && (
+                <span className="absolute -top-1.5 left-1/2 -translate-x-1/2 h-1 w-4 rounded-full bg-primary" />
+              )}
+              {recommendedId === p.id && selected !== i && (
+                <span className="absolute -top-1.5 left-1/2 -translate-x-1/2 h-1 w-4 rounded-full bg-green-500" />
+              )}
+              <span className="text-xs font-semibold block">{p.name}</span>
+              <span className={`text-[10px] block mt-0.5 ${selected === i ? 'text-background/60' : 'text-muted-foreground/60'}`}>
+                €{(isYearly ? p.yearlyPrice : p.monthlyPrice).toFixed(0)}
+              </span>
+            </button>
+          ))}
+        </div>
       </div>
 
-      {/* Feature table */}
-      <div className="rounded-2xl border overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="w-full text-xs">
-            <thead>
-              <tr className="border-b bg-muted/40">
-                <th className="text-left px-4 py-3 font-medium text-muted-foreground">Wat zit erin?</th>
-                {plans.map(p => <th key={p.id} className={`px-3 py-3 text-center font-semibold ${p.popular ? 'text-primary' : ''}`}>{p.name}</th>)}
-              </tr>
-            </thead>
-            <tbody>
-              {featureRows.map((feat, i) => (
-                <tr key={i} className="border-b last:border-0 hover:bg-muted/20">
-                  <td className="px-4 py-2.5">
-                    <p className="font-medium text-foreground">{feat.label}</p>
-                    <p className="text-muted-foreground mt-0.5">{feat.desc}</p>
-                  </td>
-                  {plans.map(p => (
-                    <td key={p.id} className="px-3 py-2.5 text-center">
-                      {feat.plans.includes(p.id)
-                        ? <span className="text-primary font-bold text-sm">✓</span>
-                        : <span className="text-muted-foreground/25 text-base">·</span>}
-                    </td>
-                  ))}
-                </tr>
-              ))}
-            </tbody>
-          </table>
+      {/* Single plan card — updates as you switch */}
+      <div className={`rounded-2xl border-2 overflow-hidden transition-all ${
+        plan.popular ? 'border-primary' : recommendedId === plan.id ? 'border-green-500' : 'border-border'
+      }`}>
+        {/* Header */}
+        <div className={`px-6 py-5 ${plan.popular ? 'bg-primary' : 'bg-muted/30'}`}>
+          <div className="flex items-start justify-between gap-4">
+            <div>
+              <div className="flex items-center gap-2 mb-1">
+                <h3 className={`text-xl font-extrabold ${plan.popular ? 'text-primary-foreground' : ''}`}>{plan.name}</h3>
+                {plan.popular && <Badge className="bg-white/20 text-white border-0 text-xs">Meest gekozen</Badge>}
+                {recommendedId === plan.id && !plan.popular && <Badge variant="outline" className="text-xs border-green-500 text-green-700 dark:text-green-400">Aanbevolen</Badge>}
+              </div>
+              <p className={`text-sm ${plan.popular ? 'text-primary-foreground/70' : 'text-muted-foreground'}`}>{plan.tagline}</p>
+            </div>
+            <div className="text-right shrink-0">
+              <div className="flex items-baseline gap-1">
+                <span className={`text-3xl font-extrabold ${plan.popular ? 'text-primary-foreground' : ''}`}>
+                  €{price.toFixed(2).replace('.', ',')}
+                </span>
+                <span className={`text-xs ${plan.popular ? 'text-primary-foreground/60' : 'text-muted-foreground'}`}>/mo</span>
+              </div>
+              {saving > 0 && (
+                <p className="text-xs text-green-400 font-medium mt-0.5">€{saving} bespaard/jaar</p>
+              )}
+            </div>
+          </div>
+
+          <div className={`flex gap-4 mt-4 text-xs ${plan.popular ? 'text-primary-foreground/70' : 'text-muted-foreground'}`}>
+            <span className="flex items-center gap-1.5"><Zap className="h-3 w-3" />{plan.creditsLabel}</span>
+            <span className="flex items-center gap-1.5"><Globe className="h-3 w-3" />{plan.workspaces} {plan.workspaces === 1 ? 'merk' : 'merken'}</span>
+          </div>
         </div>
+
+        {/* Body */}
+        <div className="p-6">
+          <div className="grid sm:grid-cols-2 gap-6 mb-6">
+            {/* Included */}
+            <div>
+              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-3">Wat zit erin</p>
+              <ul className="space-y-2">
+                {planFeatures.map((f, i) => (
+                  <li key={i} className="flex items-start gap-2 text-sm">
+                    <Check className="h-4 w-4 text-primary shrink-0 mt-0.5" strokeWidth={2.5} />
+                    <span>{f.label}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            {/* Not included */}
+            {missingFeatures.length > 0 && (
+              <div>
+                <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-3">Niet inbegrepen</p>
+                <ul className="space-y-2">
+                  {missingFeatures.slice(0, 5).map((f, i) => (
+                    <li key={i} className="flex items-start gap-2 text-sm text-muted-foreground/60">
+                      <span className="h-4 w-4 shrink-0 flex items-center justify-center text-muted-foreground/30 mt-0.5 text-lg leading-none">·</span>
+                      <span>{f.label}</span>
+                    </li>
+                  ))}
+                  {missingFeatures.length > 5 && (
+                    <li className="text-xs text-muted-foreground/50 pl-6">+{missingFeatures.length - 5} meer bij hogere plannen</li>
+                  )}
+                </ul>
+              </div>
+            )}
+          </div>
+
+          {/* Upgrade nudge */}
+          {selected < plans.length - 1 && (
+            <div className="rounded-xl bg-muted/40 border px-4 py-3 mb-5 flex items-center justify-between gap-3">
+              <p className="text-xs text-muted-foreground">
+                <strong className="text-foreground">{plans[selected + 1].name}</strong> geeft je {plans[selected + 1].workspaces}× meer merken en {plans[selected + 1].credits} AI-tegoed
+              </p>
+              <button onClick={() => setSelected(selected + 1)} className="text-xs text-primary hover:underline cursor-pointer shrink-0">Bekijken →</button>
+            </div>
+          )}
+
+          <Button className="w-full cursor-pointer gap-2" size="lg" asChild>
+            <Link href="#">
+              <Sparkles className="h-4 w-4" />
+              {plan.cta}
+            </Link>
+          </Button>
+          <p className="text-center text-xs text-muted-foreground mt-3">Geen creditcard nodig · 14 dagen geld-terug-garantie</p>
+        </div>
+      </div>
+
+      {/* Prev/next nav on mobile */}
+      <div className="flex items-center justify-between text-sm sm:hidden">
+        <button
+          onClick={() => setSelected(Math.max(0, selected - 1))}
+          disabled={selected === 0}
+          className="text-muted-foreground hover:text-foreground disabled:opacity-30 cursor-pointer"
+        >
+          ← {selected > 0 ? plans[selected - 1].name : ''}
+        </button>
+        <span className="text-muted-foreground text-xs">{selected + 1} / {plans.length}</span>
+        <button
+          onClick={() => setSelected(Math.min(plans.length - 1, selected + 1))}
+          disabled={selected === plans.length - 1}
+          className="text-muted-foreground hover:text-foreground disabled:opacity-30 cursor-pointer"
+        >
+          {selected < plans.length - 1 ? plans[selected + 1].name : ''} →
+        </button>
       </div>
     </div>
   )
 }
+
 
 // ── Top-up packs ──────────────────────────────────────────────────────────────
 
