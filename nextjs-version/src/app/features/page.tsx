@@ -341,7 +341,7 @@ export default function FeaturesPage() {
                     Gratis beginnen
                   </Link>
                 </Button>
-                <Button size="lg" variant="outline" className="cursor-pointer px-8 text-base border-white/40 text-white hover:bg-white/10" asChild>
+<Button size="lg" className="cursor-pointer px-8 text-base bg-white/10 text-white border border-white/40 hover:bg-white/20" asChild>
                   <Link href="/pricing">Prijzen bekijken</Link>
                 </Button>
               </div>
