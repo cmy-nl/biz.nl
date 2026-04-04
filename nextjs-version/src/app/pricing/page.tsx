@@ -110,7 +110,6 @@ const featureRows = [
 
 // ── Quiz ──────────────────────────────────────────────────────────────────────
 
-type Answer = { value: string; label: string }
 
 const quizQuestions = [
   {
